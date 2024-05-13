@@ -98,27 +98,57 @@ class Board:
 
         return True # si se llega a este punto sin encontrar una bomba, la función devuelve True indicando una excavación exitosa
 
-    def __str__(self): 
+
+# -------------------------------------------------------------
+    def __str__(self):
         # magic function 
         # controla cómo se muestran como cadenas de texto los objetos de una clase. codigo legible y comprensible
         # lets create a new array that represents what the user would see
 
         visible_board = [[None for _ in range(self.dim_size)] for _ in range(self.dim_size)]
-              
         for row in range(self.dim_size):
             for col in range(self.dim_size):
-                if (row, col) in self.dug:
+                if (row,col) in self.dug:
                     visible_board[row][col] = str(self.board[row][col])
                 else:
                     visible_board[row][col] = ' '
+        
+        # put this together in a string
+        string_rep = ''
+        # get max column widths for printing
+        widths = []
+        for idx in range(self.dim_size):
+            columns = map(lambda x: x[idx], visible_board)
+            widths.append(
+                len(
+                    max(columns, key = len)
+                )
+            )
 
-        #-------------------------------------------
+        # print the csv strings
+        indices = [i for i in range(self.dim_size)]
+        indices_row = '   '
+        cells = []
+        for idx, col in enumerate(indices):
+            format = '%-' + str(widths[idx]) + "s"
+            cells.append(format % (col))
+        indices_row += '  '.join(cells)
+        indices_row += '  \n'
+        
+        for i in range(len(visible_board)):
+            row = visible_board[i]
+            string_rep += f'{i} |'
+            cells = []
+            for idx, col in enumerate(row):
+                format = '%-' + str(widths[idx]) + "s"
+                cells.append(format % (col))
+            string_rep += ' |'.join(cells)
+            string_rep += ' |\n'
 
-            if isinstance(self.board[row][col], str):
-                visible_board[row][col] = self.board[row][col]  # Ya es una cadena
-            else:
-                visible_board[row][col] = str(self.board[row][col])  # Convertir valores que no son cadenas
+        str_len = int(len(string_rep) / self.dim_size)
+        string_rep = indices_row + '-'*str_len + '\n' + string_rep + '-'*str_len
 
+        return string_rep
 
 # play the game 
 def play(dim_size=10, num_bombs=10):
@@ -129,8 +159,6 @@ def play(dim_size=10, num_bombs=10):
 
     while len(board.dug) < board.dim_size ** 2 - num_bombs:
         print(board) #ERROR 131
-
-
         #0,0 or 0, 0 or 0,  0
         user_input = re.split(',(\\s)*', input("Where would you like to dig? Input as row,col: "))  # '0, 3'
         row, col = int(user_input[0]), int(user_input[-1])
