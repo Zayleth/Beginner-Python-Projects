@@ -78,14 +78,11 @@ class Board:
 
         # dig at that location 
         # return True if successfull dig, False if bomb dug
-
         self.dug.add((row, col)) 
-
         if self.board[row][col] == '*': #Si el elemento del tablero en esa ubicación es '*', significa que hay una bomba. devuelve False indicando una excavación fallida.
             return False
         elif self.board[row][col] > 0:
             return True
-        
         # self.board[row][col] == 0: 
         # significa que no hay bomba ni número en la casilla (casilla vacía). 
         # En este caso, se procede a desenterrar las casillas vecinas de forma recursiva:
@@ -152,18 +149,18 @@ class Board:
 
 # play the game 
 def play(dim_size=10, num_bombs=10):
-    # Step 1: create the board and plant the bombs 
+    # Step 1: create the board and plant the bombs
     board = Board(dim_size, num_bombs)
 
     safe = True
 
     while len(board.dug) < board.dim_size ** 2 - num_bombs:
-        print(board) #ERROR 131
-        #0,0 or 0, 0 or 0,  0
+        print(board)
+        # 0,0 or 0, 0 or 0,    0
         user_input = re.split(',(\\s)*', input("Where would you like to dig? Input as row,col: "))  # '0, 3'
         row, col = int(user_input[0]), int(user_input[-1])
         if row < 0 or row >= board.dim_size or col < 0 or col >= dim_size:
-            print('Invalid location. Try again.')
+            print("Invalid location. Try again.")
             continue
 
         # if it's valid, we dig 
@@ -177,12 +174,9 @@ def play(dim_size=10, num_bombs=10):
         print('CONGRATULATIONS!! YOU WON!')
     else:
         print('SORRY, GAME OVER')
-
-        # lets reveal the whole board.
-        board.dug = [(r, c) for r in range(board.dim_size) for c in range(board.dim_size)]
+        # let's reveal the whole board!
+        board.dug = [(r,c) for r in range(board.dim_size) for c in range(board.dim_size)]
         print(board)
 
 if __name__ == '__main__': # good practice
     play()
-
-
