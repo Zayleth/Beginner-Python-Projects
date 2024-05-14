@@ -8,7 +8,7 @@ import re
 class Board:
     def __init__(self, dim_size, num_bombs):
         self.dim_size = dim_size
-        self.num_boms = num_bombs
+        self.num_bombs = num_bombs
 
         # let's create the board 
         # helper function
@@ -37,16 +37,16 @@ class Board:
 
         # plant the bombs: coloca aleatoriamente un número específico de bombas (self.num_bombs) en un tablero de juego representado por una lista bidimensional (board).
         bombs_planted = 0 # se establece en 0, para llevar la cuenta del número de bombas plantadas hasta el momento.
-        while bombs_planted < self.num_boms: # mientras bombs_planted sea menor que self.num_bombs el bucle sigue colocando bombas hasta que se alcance el número deseado.
+        while bombs_planted < self.num_bombs: # mientras bombs_planted sea menor que self.num_bombs el bucle sigue colocando bombas hasta que se alcance el número deseado.
             loc = random.randint(0, self.dim_size**2 - 1) # escoge una locacion random entre el rango, que representa todas las coordenadas posibles en el tablero
             row = loc // self.dim_size # da el índice de fila donde se podría colocar la bomba.
             col = loc % self.dim_size # da el índice de columna donde se podría colocar la bomba.
 
-            if board[row][col] == '*': 
+            if board[row][col] == '*':
                 continue
 
             board[row][col] = '*' # se asigna '*' al elemento en board[row][col], indicando que se ha colocado una bomba allí.
-            bombs_planted+= 1 # bombs_planted se incrementa en 1 para llevar la cuenta del total de bombas plantadas.
+            bombs_planted += 1 # bombs_planted se incrementa en 1 para llevar la cuenta del total de bombas plantadas.
         
         return board # devuelve el tablero con las nuevas bombas 
 
@@ -57,7 +57,7 @@ class Board:
                 if self.board[r][c] == '*':
                     # if this is already a bomb, we don't want to calculate anything
                     continue
-                self.board[r][c] == self.get_num_neighboring_bombs(r, c) #funcion da el numero de bombas que hay cerca de la fila y columna
+                self.board[r][c] = self.get_num_neighboring_bombs(r, c) #funcion da el numero de bombas que hay cerca de la fila y columna
     
     def get_num_neighboring_bombs(self, row, col): # calcula y devuelve la cantidad de bombas que rodean a una casilla específica en el tablero del juego.
 
@@ -96,7 +96,6 @@ class Board:
         return True # si se llega a este punto sin encontrar una bomba, la función devuelve True indicando una excavación exitosa
 
 
-# -------------------------------------------------------------
     def __str__(self):
         # magic function 
         # controla cómo se muestran como cadenas de texto los objetos de una clase. codigo legible y comprensible
